@@ -1,0 +1,308 @@
+{
+  "version": 4,
+  "terraform_version": "1.14.9",
+  "serial": 15,
+  "lineage": "790ee592-1f9f-b606-b422-f17b1f23893a",
+  "outputs": {
+    "lambda_url": {
+      "value": "https://6fp5gq3ycamod2cbh2fwj5jroq0cgibl.lambda-url.us-east-1.on.aws/",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "mode": "data",
+      "type": "archive_file",
+      "name": "lambda_zip",
+      "provider": "provider[\"registry.terraform.io/hashicorp/archive\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "exclude_symlink_directories": null,
+            "excludes": null,
+            "id": "3f500b5348a0a8a41ca64366b94e81e190926a88",
+            "output_base64sha256": "UnEblWRHMimVSVH7XIgWy/lRbJbnXyyS8380NVpaBcI=",
+            "output_base64sha512": "oq6fmDyePrNoujEP06n9mRC2QhurNdirvQ+hqdpGZ5hb6Dnwd5dkxpRy/xHyXwaiqRLCU6FrlohY1UaBKSiAwQ==",
+            "output_file_mode": null,
+            "output_md5": "3a13878c926f0207abc5d229e7e8b7a6",
+            "output_path": "./lambda_function.zip",
+            "output_sha": "3f500b5348a0a8a41ca64366b94e81e190926a88",
+            "output_sha256": "52711b9564473229954951fb5c8816cbf9516c96e75f2c92f37f34355a5a05c2",
+            "output_sha512": "a2ae9f983c9e3eb368ba310fd3a9fd9910b6421bab35d8abbd0fa1a9da4667985be839f0779764c69472ff11f25f06a2a912c253a16b968858d54681292880c1",
+            "output_size": 1612,
+            "source": [],
+            "source_content": null,
+            "source_content_filename": null,
+            "source_dir": "./../lambda",
+            "source_file": null,
+            "type": "zip"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_dynamodb_table",
+      "name": "tasks",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:dynamodb:us-east-1:862503801547:table/tasks",
+            "attribute": [
+              {
+                "name": "id",
+                "type": "S"
+              }
+            ],
+            "billing_mode": "PAY_PER_REQUEST",
+            "deletion_protection_enabled": false,
+            "global_secondary_index": [],
+            "hash_key": "id",
+            "id": "tasks",
+            "import_table": [],
+            "local_secondary_index": [],
+            "name": "tasks",
+            "on_demand_throughput": [],
+            "point_in_time_recovery": [
+              {
+                "enabled": false,
+                "recovery_period_in_days": 0
+              }
+            ],
+            "range_key": null,
+            "read_capacity": 0,
+            "replica": [],
+            "restore_date_time": null,
+            "restore_source_name": null,
+            "restore_source_table_arn": null,
+            "restore_to_latest_time": null,
+            "server_side_encryption": [],
+            "stream_arn": "",
+            "stream_enabled": false,
+            "stream_label": "",
+            "stream_view_type": "",
+            "table_class": "STANDARD",
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "ttl": [
+              {
+                "attribute_name": "",
+                "enabled": false
+              }
+            ],
+            "write_capacity": 0
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjYwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "lambda_exec_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::862503801547:role/lambda_exec_role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-04-29T00:09:26Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "lambda_exec_role",
+            "inline_policy": [
+              {
+                "name": "lambda_dynamodb_policy",
+                "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:UpdateItem\",\"dynamodb:DeleteItem\",\"dynamodb:Scan\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:dynamodb:us-east-1:862503801547:table/tasks\"},{\"Action\":[\"logs:CreateLogGroup\",\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:*:*:*\"}]}"
+              }
+            ],
+            "managed_policy_arns": [],
+            "max_session_duration": 3600,
+            "name": "lambda_exec_role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA4RUJ3SLF7D3R5GERR"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy",
+      "name": "lambda_dynamodb",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "lambda_exec_role:lambda_dynamodb_policy",
+            "name": "lambda_dynamodb_policy",
+            "name_prefix": "",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\",\"dynamodb:PutItem\",\"dynamodb:UpdateItem\",\"dynamodb:DeleteItem\",\"dynamodb:Scan\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:dynamodb:us-east-1:862503801547:table/tasks\"},{\"Action\":[\"logs:CreateLogGroup\",\"logs:CreateLogStream\",\"logs:PutLogEvents\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:logs:*:*:*\"}]}",
+            "role": "lambda_exec_role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_dynamodb_table.tasks",
+            "aws_iam_role.lambda_exec_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "task_manager",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architectures": [
+              "x86_64"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:862503801547:function:task_manager",
+            "code_sha256": "UnEblWRHMimVSVH7XIgWy/lRbJbnXyyS8380NVpaBcI=",
+            "code_signing_config_arn": "",
+            "dead_letter_config": [],
+            "description": "",
+            "environment": [
+              {
+                "variables": {
+                  "TABLE_NAME": "tasks"
+                }
+              }
+            ],
+            "ephemeral_storage": [
+              {
+                "size": 512
+              }
+            ],
+            "file_system_config": [],
+            "filename": "./lambda_function.zip",
+            "function_name": "task_manager",
+            "handler": "index.handler",
+            "id": "task_manager",
+            "image_config": [],
+            "image_uri": "",
+            "invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:862503801547:function:task_manager/invocations",
+            "kms_key_arn": "",
+            "last_modified": "2026-04-29T00:09:45.654+0000",
+            "layers": [],
+            "logging_config": [
+              {
+                "application_log_level": "",
+                "log_format": "Text",
+                "log_group": "/aws/lambda/task_manager",
+                "system_log_level": ""
+              }
+            ],
+            "memory_size": 128,
+            "package_type": "Zip",
+            "publish": false,
+            "qualified_arn": "arn:aws:lambda:us-east-1:862503801547:function:task_manager:$LATEST",
+            "qualified_invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:862503801547:function:task_manager:$LATEST/invocations",
+            "replace_security_groups_on_destroy": null,
+            "replacement_security_group_ids": null,
+            "reserved_concurrent_executions": -1,
+            "role": "arn:aws:iam::862503801547:role/lambda_exec_role",
+            "runtime": "nodejs20.x",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "snap_start": [],
+            "source_code_hash": "UnEblWRHMimVSVH7XIgWy/lRbJbnXyyS8380NVpaBcI=",
+            "source_code_size": 1612,
+            "tags": {},
+            "tags_all": {},
+            "timeout": 10,
+            "timeouts": null,
+            "tracing_config": [
+              {
+                "mode": "PassThrough"
+              }
+            ],
+            "version": "$LATEST",
+            "vpc_config": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_dynamodb_table.tasks",
+            "aws_iam_role.lambda_exec_role",
+            "data.archive_file.lambda_zip"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lambda_function_url",
+      "name": "task_manager_url",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "authorization_type": "NONE",
+            "cors": [
+              {
+                "allow_credentials": false,
+                "allow_headers": [
+                  "Content-Type"
+                ],
+                "allow_methods": [
+                  "*"
+                ],
+                "allow_origins": [
+                  "*"
+                ],
+                "expose_headers": [],
+                "max_age": 0
+              }
+            ],
+            "function_arn": "arn:aws:lambda:us-east-1:862503801547:function:task_manager",
+            "function_name": "task_manager",
+            "function_url": "https://6fp5gq3ycamod2cbh2fwj5jroq0cgibl.lambda-url.us-east-1.on.aws/",
+            "id": "task_manager",
+            "invoke_mode": "BUFFERED",
+            "qualifier": "",
+            "timeouts": null,
+            "url_id": "6fp5gq3ycamod2cbh2fwj5jroq0cgibl"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDB9fQ==",
+          "dependencies": [
+            "aws_dynamodb_table.tasks",
+            "aws_iam_role.lambda_exec_role",
+            "aws_lambda_function.task_manager",
+            "data.archive_file.lambda_zip"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
