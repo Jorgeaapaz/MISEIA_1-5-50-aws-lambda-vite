@@ -41,7 +41,7 @@ export default function App() {
             <h1 className="text-2xl font-bold text-slate-800">Task Manager</h1>
           </div>
           <p className="text-slate-500 text-sm ml-11">
-            {counts.completed} de {counts.all} completadas
+            {counts.completed} de {counts.all} completadas · CI/CD ✓
           </p>
         </header>
 
