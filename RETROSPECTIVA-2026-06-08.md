@@ -413,3 +413,71 @@ La conexión requiere autorización OAuth desde el navegador — no se puede com
 | Pull Request abierto | Deploy de preview → URL única por PR |
 | PR mergeado a `main` | Promote automático a producción |
 | Check en GitHub | Aparece el estado del deploy Vercel en cada commit/PR |
+
+---
+
+## CI/CD — Resultados del test (2026-06-08)
+
+### Problema encontrado: `rootDirectory` no configurado
+
+La integración GitHub→Vercel quedó activa pero los primeros 3 deploys fallaron en 2-3s con error de build. La causa: Vercel intentaba compilar desde la raíz del repo en lugar de `frontend/`, porque el deploy manual original se lanzó desde dentro de `frontend/` y el proyecto no tenía `rootDirectory` configurado.
+
+```
+● Error  frontend-pf72kwa8l-jaapaz.vercel.app   3s   (build desde raíz — sin package.json)
+● Error  frontend-84p3j1mw6-jaapaz.vercel.app   2s
+● Error  frontend-jk2y5v713-jaapaz.vercel.app   2s
+```
+
+### Solución: API de Vercel para actualizar `rootDirectory`
+
+No hay comando CLI para cambiar esta configuración, pero se puede hacer vía REST API:
+
+```powershell
+$token     = "<vercel_token>"          # C:\Users\jorge\AppData\Roaming\xdg.data\com.vercel.cli\auth.json
+$projectId = "prj_lqu6L1mcHcL7YQ04nuTDqML9J7AD"
+
+Invoke-RestMethod -Uri "https://api.vercel.com/v9/projects/$projectId" `
+  -Method PATCH `
+  -Headers @{ Authorization = "Bearer $token"; "Content-Type" = "application/json" } `
+  -Body '{"rootDirectory":"frontend"}'
+```
+
+Respuesta confirmada: `rootDirectory: frontend · framework: vite`
+
+### Resultado final: CI/CD operativo ✅
+
+Tras el fix, se hizo un push vacío para disparar un nuevo deploy:
+
+```bash
+git commit --allow-empty -m "ci: trigger Vercel redeploy after rootDirectory fix"
+git push origin main
+```
+
+Resultado:
+
+| Métrica | Valor |
+|---|---|
+| Tiempo hasta detección del push | ~3 segundos |
+| Duración del build Vite | ~8 segundos |
+| Estado final | `● Ready` |
+| URL de producción | https://frontend-jaapaz.vercel.app |
+| Cambio visible | Subtítulo del header: `X de Y completadas · CI/CD ✓` |
+
+**Flujo completo confirmado:**
+```
+git push origin main
+       ↓ ~3s
+Vercel detecta push en GitHub
+       ↓ ~8s
+npm install + vite build (36 módulos)
+       ↓
+● Ready → https://frontend-jaapaz.vercel.app
+```
+
+### Token y project ID de referencia
+
+| Dato | Valor |
+|---|---|
+| Vercel token (path) | `C:\Users\jorge\AppData\Roaming\xdg.data\com.vercel.cli\auth.json` |
+| Project ID | `prj_lqu6L1mcHcL7YQ04nuTDqML9J7AD` |
+| API endpoint | `PATCH https://api.vercel.com/v9/projects/{projectId}` |
