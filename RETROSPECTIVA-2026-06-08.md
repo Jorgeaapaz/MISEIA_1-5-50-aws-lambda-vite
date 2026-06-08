@@ -363,7 +363,53 @@ El único servicio local es el servidor de desarrollo Vite (`localhost:5173`), q
 - ✅ Código en GitHub y GitLab
 
 **Para próximas sesiones:**
-- Conectar el repositorio GitHub a Vercel para CI/CD automático en cada push (actualmente el deploy es manual via CLI).
+- ~~Conectar el repositorio GitHub a Vercel para CI/CD automático en cada push~~ → ver sección CI/CD abajo.
 - Considerar renombrar el proyecto Vercel de `frontend` a `task-manager` para mayor claridad.
 - Agregar autenticación (Cognito o similar) si se va a usar en producción real.
 - Considerar un índice GSI en DynamoDB por `completed` o `createdAt` si la tabla crece.
+
+---
+
+## CI/CD — Conexión GitHub → Vercel
+
+### Estado
+El deploy inicial se hizo manualmente con `vercel --prod --yes` desde la máquina local. La cuenta Vercel no tenía la GitHub App instalada, por lo que el CLI falló al intentar conectar el repo:
+
+```
+Error: Failed to link Jorgeaapaz/MISEIA_1-5-50-aws-lambda-vite.
+You need to add a Login Connection to your GitHub account first. (400)
+```
+
+La conexión requiere autorización OAuth desde el navegador — no se puede completar solo con el CLI.
+
+### Pasos para activar CI/CD (manual, desde el navegador)
+
+1. Ir a la configuración Git del proyecto Vercel:
+   ```
+   https://vercel.com/jaapaz/frontend/settings/git
+   ```
+
+2. Hacer clic en **"Connect Git Repository"** → seleccionar **GitHub**.
+
+3. Autorizar la **Vercel GitHub App** en la cuenta `Jorgeaapaz`.
+   - Opción recomendada: acceso solo al repo `MISEIA_1-5-50-aws-lambda-vite`.
+
+4. Seleccionar el repositorio:
+   ```
+   Jorgeaapaz/MISEIA_1-5-50-aws-lambda-vite
+   ```
+
+5. Confirmar configuración:
+   - **Root Directory:** `frontend`
+   - **Production branch:** `main`
+
+6. Hacer clic en **"Connect"** — Vercel dispara un deploy de verificación automático.
+
+### Comportamiento una vez conectado
+
+| Evento | Resultado |
+|---|---|
+| `git push origin main` | Deploy automático a producción → `https://frontend-jaapaz.vercel.app` |
+| Pull Request abierto | Deploy de preview → URL única por PR |
+| PR mergeado a `main` | Promote automático a producción |
+| Check en GitHub | Aparece el estado del deploy Vercel en cada commit/PR |
