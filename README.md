@@ -1,6 +1,9 @@
 # Task Manager — AWS Lambda + DynamoDB + Vite
 
-A full-stack task management application built with a serverless backend (AWS Lambda + DynamoDB via Terraform) and a React/TypeScript frontend deployed on Vercel.
+A full-stack task management application built with a serverless backend (AWS Lambda + DynamoDB via Terraform) and a React/TypeScript frontend deployed on Vercel with CI/CD via GitHub integration.
+
+**Live:** https://frontend-jaapaz.vercel.app  
+**API:** https://7if1x7cbrl.execute-api.us-east-1.amazonaws.com/tasks
 
 ---
 
@@ -165,11 +168,25 @@ curl -X DELETE $LAMBDA_URL/tasks/<id>
 
 ### 4. Deploy frontend to Vercel
 
-Connect the repository on [vercel.com](https://vercel.com):
-- Framework preset: **Vite**
-- Root directory: `frontend/`
-- Environment variable: `VITE_API_URL` → your Lambda URL (no trailing slash)
-- Build command: `npm run build` / Output dir: `dist`
+#### Option A — CLI (manual deploy)
+
+```bash
+npm install -g vercel
+cd frontend
+vercel whoami                  # authenticate if needed
+echo "https://<lambda_url>" | vercel env add VITE_API_URL production
+vercel --prod --yes
+```
+
+#### Option B — Git integration (CI/CD, recommended)
+
+1. Go to **[vercel.com/jaapaz/frontend/settings/git](https://vercel.com/jaapaz/frontend/settings/git)**
+2. Click **"Connect Git Repository"** → GitHub
+3. Authorize the **Vercel GitHub App** on the `Jorgeaapaz` account (select only `MISEIA_1-5-50-aws-lambda-vite`)
+4. Set **Root Directory:** `frontend` · **Production branch:** `main`
+5. Click **"Connect"**
+
+Once connected, every `git push origin main` deploys automatically to production. Pull Requests get a unique preview URL and a status check on GitHub.
 
 ---
 
@@ -220,3 +237,4 @@ Connect the repository on [vercel.com](https://vercel.com):
 | Database | Amazon DynamoDB (on-demand) |
 | Frontend | Vite · React 18 · TypeScript · Tailwind CSS |
 | Hosting | Vercel (frontend) · AWS (backend) |
+| CI/CD | Vercel Git Integration (GitHub → auto-deploy on push) |
